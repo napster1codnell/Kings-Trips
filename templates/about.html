@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% block title %}About | KingSTrips{% endblock %}
+
+{% block styles %}
+<style>
+
+/* =========================
+   HERO
+========================= */
+
+.hero-about{
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+}
+
+.hero-about video{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.hero-about::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(15,23,42,0.75), rgba(13,110,253,0.55));
+  z-index: 2;
+}
+
+.hero-content{
+  position: relative;
+  z-index: 3;
+  max-width: 900px;
+}
+
+.hero-about h1{
+  font-size: 3.5rem;
+  font-weight: 800;
+}
+
+.hero-about p{
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.info-card{
+  background: white;
+  border-radius: 28px;
+  padding: 2.5rem;
+  border: 1px solid rgba(15,23,42,0.08);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+  height: 100%;
+  transition: 0.3s ease;
+}
+
+.info-card:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+}
+
+.info-card h4{
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #0f172a;
+}
+
+.info-card ul{
+  padding-left: 1.2rem;
+  margin: 0;
+  color: #475569;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+  padding: 100px 0;
+}
+
+.section-title{
+  font-size: 2.8rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #0f172a;
+}
+
+/* =========================
+   FOUNDER
+========================= */
+
+.founder-img{
+  width: 100%;
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+  object-fit: cover;
+}
+
+.founder-card{
+  background: white;
+  border-radius: 28px;
+  padding: 2.5rem;
+  border: 1px solid rgba(15,23,42,0.08);
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  background: linear-gradient(135deg, #0d6efd, #0b1d39);
+  color: white;
+  padding: 80px 0;
+}
+
+.stat-box h3{
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+/* =========================
+   BANKING
+========================= */
+
+.banking{
+  background: #f8fafc;
+}
+
+.bank-card{
+  background: white;
+  border-radius: 28px;
+  padding: 3rem;
+  max-width: 750px;
+  margin: auto;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+  border: 1px solid rgba(15,23,42,0.08);
+}
+
+.bank-card h4{
+  color: #0d6efd;
+  font-weight: 800;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+  .hero-about h1{
+    font-size: 2.2rem;
+  }
+
+  .section-title{
+    font-size: 2rem;
+  }
+
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-about">
+
+  <video autoplay muted loop playsinline>
+    <source src="{{ url_for('static', filename='images/hero.mp4') }}" type="video/mp4">
+  </video>
+
+  <div class="container hero-content">
+
+    <h1>About KingSTrips</h1>
+
+    <p>
+      Safe, professional and unforgettable group travel experiences across Southern Africa.
+    </p>
+
+    <a href="#founder" class="btn btn-primary-modern mt-3">
+      Meet Our Founder
+    </a>
+
+  </div>
+
+</section>
+
+<!-- WHO WE ARE -->
+<section class="section">
+
+  <div class="container">
+
+    <h2 class="section-title">Who We Are</h2>
+
+    <div class="row g-4">
+
+      <div class="col-lg-6">
+
+        <div class="info-card">
+
+          <h4>Our Company</h4>
+
+          <p>
+            KingSTrips is a professional travel company specialising in school tours,
+            church trips, corporate retreats and customised leisure experiences.
+          </p>
+
+          <p>
+            We handle transport, accommodation, meals and activities so every journey
+            is smooth, safe and stress-free.
+          </p>
+
+          <p>
+            Our mission is to create meaningful travel experiences that connect people
+            and create lifelong memories.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="col-lg-6">
+
+        <div class="info-card">
+
+          <h4>Why Choose Us</h4>
+
+          <ul>
+            <li>Professional planning & coordination</li>
+            <li>Safe and reliable transport</li>
+            <li>Trusted accommodation partners</li>
+            <li>Affordable group packages</li>
+            <li>Excellent customer support</li>
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- FOUNDER -->
+<section id="founder" class="section bg-light">
+
+  <div class="container">
+
+    <h2 class="section-title">Meet the Founder</h2>
+
+    <div class="row align-items-center g-5">
+
+      <div class="col-lg-5">
+        <img src="{{ url_for('static', filename='images/founder.jpg') }}" class="founder-img" alt="Founder">
+      </div>
+
+      <div class="col-lg-7">
+
+        <div class="founder-card">
+
+          <h3 class="fw-bold">Thulani Blessing Mathebula</h3>
+
+          <p class="text-primary fw-semibold">Founder & Managing Director</p>
+
+          <p>
+            Thulani founded KingSTrips with a vision to build a trusted travel brand
+            focused on safety, professionalism and excellence.
+          </p>
+
+          <p>
+            Every trip is personally overseen to ensure quality, safety and unforgettable experiences.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- STATS -->
+<section class="stats text-center">
+
+  <div class="container">
+
+    <div class="row g-4">
+
+      <div class="col-md-4 stat-box">
+        <h3>100+</h3>
+        <p>Happy Travellers</p>
+      </div>
+
+      <div class="col-md-4 stat-box">
+        <h3>20+</h3>
+        <p>Successful Trips</p>
+      </div>
+
+      <div class="col-md-4 stat-box">
+        <h3>5+</h3>
+        <p>Destinations</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- BANKING -->
+<section class="section banking">
+
+  <div class="container">
+
+    <h2 class="section-title">Banking Details</h2>
+
+    <div class="bank-card text-center">
+
+      <h4>KINGSTRIPS (PTY) LTD</h4>
+
+      <p><strong>Bank:</strong> ABSA</p>
+      <p><strong>Account Type:</strong> Current Account</p>
+      <p><strong>Account Number:</strong> 4117724765</p>
+      <p><strong>Branch Code:</strong> 632005</p>
+
+    </div>
+
+  </div>
+
+</section>
+
+{% endblock %}

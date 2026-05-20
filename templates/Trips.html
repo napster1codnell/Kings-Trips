@@ -1,0 +1,1015 @@
+{% extends "base.html" %}
+{% block title %}KingSTrips | Trips & Memories{% endblock %}
+
+{% block styles %}
+<style>
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.trips-hero {
+  position: relative;
+  min-height: 75vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.trips-hero video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trips-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(5, 10, 20, 0.92),
+      rgba(13, 110, 253, 0.75)
+    );
+  z-index: 1;
+}
+
+.trips-hero .container {
+  position: relative;
+  z-index: 3;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 10px 18px;
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.trips-hero h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.trips-hero h1 span {
+  color: #ffb703;
+}
+
+.trips-hero p {
+  font-size: 1.15rem;
+  max-width: 650px;
+  opacity: 0.92;
+  margin-bottom: 2rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-glow {
+  background: white;
+  color: #0d6efd;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  transition: 0.3s ease;
+}
+
+.btn-glow:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(255,255,255,0.2);
+  color: #0d6efd;
+}
+
+.btn-dark-glass {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  backdrop-filter: blur(10px);
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+.btn-dark-glass:hover {
+  background: white;
+  color: #0d6efd;
+}
+
+/* =========================
+   FLOATING STATS
+========================= */
+
+.stats-wrapper {
+  margin-top: -80px;
+  position: relative;
+  z-index: 5;
+}
+
+.stats-card {
+  background: white;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+.stat-box {
+  text-align: center;
+}
+
+.stat-box h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0d6efd;
+}
+
+.stat-box p {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* =========================
+   SECTION DESIGN
+========================= */
+
+.modern-section {
+  padding: 100px 0;
+}
+
+.section-mini {
+  color: #0d6efd;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.section-heading {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.section-text {
+  color: #6b7280;
+  font-size: 1.05rem;
+}
+
+/* =========================
+   TRIP CARDS
+========================= */
+
+.trip-card-modern {
+  background: white;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+  height: 100%;
+  transition: 0.4s ease;
+}
+
+.trip-card-modern:hover {
+  transform: translateY(-10px);
+}
+
+.trip-top {
+  background: linear-gradient(135deg, #0d6efd, #2563eb);
+  color: white;
+  padding: 2rem;
+}
+
+.trip-price {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.trip-body {
+  padding: 2rem;
+}
+
+.trip-body ul {
+  list-style: none;
+  padding: 0;
+}
+
+.trip-body ul li {
+  margin-bottom: 1rem;
+  color: #4b5563;
+}
+
+.trip-body ul li i {
+  color: #0d6efd;
+  margin-right: 10px;
+}
+
+.btn-primary-custom {
+  background: linear-gradient(135deg, #0d6efd, #2563eb);
+  border: none;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  transition: 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+  transform: translateY(-3px);
+  color: white;
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline-modern {
+  position: relative;
+}
+
+.timeline-item {
+  background: white;
+  border-radius: 28px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+  border-left: 5px solid #0d6efd;
+  transition: 0.4s ease;
+}
+
+.timeline-item:hover {
+  transform: translateX(10px);
+}
+
+.timeline-year {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0d6efd;
+}
+
+.achievement-badge {
+  background: rgba(13,110,253,0.1);
+  color: #0d6efd;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* =========================
+   GALLERY
+========================= */
+
+.gallery-filter button {
+  border-radius: 50px;
+  padding: 10px 22px;
+  border: 1px solid rgba(13,110,253,0.2);
+  background: white;
+  color: #0d6efd;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.gallery-filter button.active,
+.gallery-filter button:hover {
+  background: #0d6efd;
+  color: white;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  height: 320px;
+  cursor: pointer;
+}
+
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.5s ease;
+}
+
+.gallery-item:hover video {
+  transform: scale(1.08);
+}
+
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.85),
+    rgba(0,0,0,0.1)
+  );
+  display: flex;
+  align-items: end;
+  padding: 2rem;
+}
+
+.gallery-content h5 {
+  color: white;
+  font-weight: 700;
+}
+
+.gallery-content p {
+  color: rgba(255,255,255,0.85);
+  margin: 0;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  z-index: 3;
+}
+
+/* =========================
+   MEMORY CARDS
+========================= */
+
+.memory-card {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+  transition: 0.4s ease;
+  height: 100%;
+}
+
+.memory-card:hover {
+  transform: translateY(-10px);
+}
+
+.memory-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+}
+
+.memory-content {
+  padding: 1.5rem;
+}
+
+.memory-date {
+  color: #0d6efd;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* =========================
+   UPLOAD SECTION
+========================= */
+
+.upload-modern {
+  background: white;
+  border-radius: 32px;
+  padding: 4rem 2rem;
+  text-align: center;
+  border: 2px dashed rgba(13,110,253,0.25);
+  transition: 0.3s ease;
+}
+
+.upload-modern:hover {
+  border-color: #0d6efd;
+}
+
+.upload-icon {
+  width: 100px;
+  height: 100px;
+  background: rgba(13,110,253,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 3rem;
+  color: #0d6efd;
+  margin-bottom: 1.5rem;
+}
+
+.preview-item {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.preview-item img,
+.preview-item video {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.remove-file {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* =========================
+   CTA SECTION
+========================= */
+
+.cta-modern {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(13,110,253,0.92),
+      rgba(37,99,235,0.92)
+    ),
+    url('{{ url_for("static", filename="images/capetown.jpg") }}')
+    center/cover;
+  border-radius: 40px;
+  padding: 5rem 2rem;
+  text-align: center;
+  color: white;
+}
+
+.social-modern {
+  margin-top: 2rem;
+}
+
+.social-modern a {
+  width: 55px;
+  height: 55px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.12);
+  border-radius: 50%;
+  margin: 0 8px;
+  color: white;
+  font-size: 1.3rem;
+  transition: 0.3s ease;
+}
+
+.social-modern a:hover {
+  background: white;
+  color: #0d6efd;
+  transform: translateY(-5px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 768px){
+
+  .trips-hero h1{
+    font-size: 2.5rem;
+  }
+
+  .section-heading{
+    font-size: 2rem;
+  }
+
+  .stats-wrapper{
+    margin-top: -40px;
+  }
+
+}
+
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/images')
+        .then(response => response.json())
+        .then(mediaFiles => {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const memoryGrid = document.getElementById('memoryGrid');
+            
+            mediaFiles.forEach((media, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-lg-4';
+                
+                let mediaElement = '';
+                if (media.type === 'video') {
+                    mediaElement = `<video muted loop playsinline preload="metadata" data-playing="false">
+                        <source src="${media.url}" type="video/mp4">
+                    </video>
+                    <div class="play-button">
+                        <i class="bi bi-play-fill"></i>
+                    </div>`;
+                } else {
+                    mediaElement = `<img src="${media.url}" alt="Travel memory">`;
+                }
+                
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.setAttribute('data-type', media.type);
+                galleryItem.setAttribute('data-location', getLocation(media.name));
+                galleryItem.innerHTML = mediaElement + `
+                    <div class="gallery-overlay">
+                        <div class="gallery-content">
+                            <h5>${getTitle(media.name)}</h5>
+                            <p>${getLocation(media.name)} · ${getDate(media.name)}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click handler for video play/pause
+                if (media.type === 'video') {
+                    const video = galleryItem.querySelector('video');
+                    const playBtn = galleryItem.querySelector('.play-button');
+                    playBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        if (video.paused) {
+                            video.play();
+                            playBtn.style.display = 'none';
+                        } else {
+                            video.pause();
+                            playBtn.style.display = 'flex';
+                        }
+                    });
+                }
+                
+                col.appendChild(galleryItem);
+                if (galleryGrid) {
+                    galleryGrid.appendChild(col);
+                }
+            });
+            
+            mediaFiles.filter(m => m.type === 'image').forEach((media, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-lg-4';
+                
+                col.innerHTML = `
+                    <div class="memory-card">
+                        <img src="${media.url}" alt="Travel memory">
+                        <div class="memory-content">
+                            <div class="memory-date">${getDate(media.name)}</div>
+                            <h5>${getTitle(media.name)}</h5>
+                            <p class="text-muted">${getDescription(media.name)}</p>
+                        </div>
+                    </div>
+                `;
+                
+                if (memoryGrid) {
+                    memoryGrid.appendChild(col);
+                }
+            });
+        })
+        .catch(error => console.error('Error loading media:', error));
+});
+
+function getTitle(filename) {
+    const name = filename.replace(/\.[^/.]+$/, '').toLowerCase();
+    if (name.includes('durban')) return 'Durban Adventure';
+    if (name.includes('capetown')) return 'Cape Town Tour';
+    if (name.includes('school')) return 'School Adventure';
+    if (name.includes('maputo')) return 'Maputo Experience';
+    if (name.includes('mozambique')) return 'Mozambique Tour';
+    if (name.includes('table_mountain')) return 'Table Mountain';
+    if (name.includes('founder')) return 'Founder Story';
+    return 'Travel Memory';
+}
+
+function getLocation(filename) {
+    const name = filename.replace(/\.[^/.]+$/, '').toLowerCase();
+    if (name.includes('durban')) return 'Durban';
+    if (name.includes('capetown')) return 'Cape Town';
+    if (name.includes('maputo') || name.includes('mozambique')) return 'Maputo';
+    if (name.includes('table_mountain')) return 'Table Mountain';
+    if (name.includes('school')) return 'Educational Tour';
+    return 'Southern Africa';
+}
+
+function getDate(filename) {
+    const name = filename.replace(/\.[^/.]+$/, '').toLowerCase();
+    if (name.includes('durban4')) return 'December 2025';
+    if (name.includes('durban2')) return 'November 2025';
+    if (name.includes('durban1')) return 'October 2025';
+    if (name.includes('school1')) return 'August 2025';
+    if (name.includes('mozambique')) return 'July 2025';
+    return '2025';
+}
+
+function getDescription(filename) {
+    const name = filename.replace(/\.[^/.]+$/, '').toLowerCase();
+    if (name.includes('durban')) return '"Best trip ever! The beach activities and boat cruise were unforgettable."';
+    if (name.includes('capetown')) return 'Luxury travel moments and breathtaking coastal adventures.';
+    if (name.includes('school')) return 'Educational experiences designed for learners and teachers.';
+    if (name.includes('maputo') || name.includes('mozambique')) return 'International adventure with cultural immersion.';
+    return 'Unforgettable travel experience.';
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="trips-hero">
+
+  <video autoplay muted loop playsinline>
+    <source src="{{ url_for('static', filename='images/hero.mp4') }}" type="video/mp4">
+  </video>
+
+  <div class="container">
+
+    <div class="hero-badge">
+      <i class="bi bi-camera-fill"></i>
+      Adventures, Memories & Luxury Experiences
+    </div>
+
+    <h1>
+      Explore Our <br>
+      <span>Trips & Memories</span>
+    </h1>
+
+    <p>
+      Discover upcoming adventures, unforgettable travel
+      moments and memories captured across Southern Africa.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#upcoming" class="btn btn-glow">
+        <i class="bi bi-airplane-fill me-2"></i>
+        Upcoming Trips
+      </a>
+
+      <a href="#gallery" class="btn btn-dark-glass">
+        <i class="bi bi-images me-2"></i>
+        View Gallery
+      </a>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- STATS -->
+<div class="container stats-wrapper">
+  <div class="stats-card">
+    <div class="row g-4">
+
+      <div class="col-md-3">
+        <div class="stat-box">
+          <h2>100+</h2>
+          <p>Happy Travellers</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="stat-box">
+          <h2>20+</h2>
+          <p>Successful Trips</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="stat-box">
+          <h2>5+</h2>
+          <p>Destinations</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="stat-box">
+          <h2>4.8★</h2>
+          <p>Traveller Rating</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- UPCOMING TRIPS -->
+<section class="modern-section bg-light" id="upcoming">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <span class="section-mini">Upcoming Tours</span>
+      <h2 class="section-heading">Book Your Next Adventure</h2>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- NAMIBIA -->
+      <div class="col-lg-6">
+
+        <div class="trip-card-modern">
+
+          <div class="trip-top">
+
+            <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill">
+              Limited Spots Available
+            </span>
+
+            <h3>Namibia International Tour</h3>
+
+            <p>
+              <i class="bi bi-calendar-event me-2"></i>
+              24 September 2026
+            </p>
+
+            <div class="trip-price">
+              R13 530
+            </div>
+
+          </div>
+
+          <div class="trip-body">
+
+            <ul>
+              <li><i class="bi bi-check-circle-fill"></i>Transport to OR Tambo</li>
+              <li><i class="bi bi-check-circle-fill"></i>Return flights</li>
+              <li><i class="bi bi-check-circle-fill"></i>Luxury accommodation</li>
+              <li><i class="bi bi-check-circle-fill"></i>Daily breakfast</li>
+              <li><i class="bi bi-check-circle-fill"></i>Boat cruise</li>
+              <li><i class="bi bi-check-circle-fill"></i>Windhoek city tour</li>
+              <li><i class="bi bi-check-circle-fill"></i>Nature reserve experience</li>
+            </ul>
+
+            <a href="{{ url_for('contact') }}" class="btn btn-primary-custom w-100">
+              Reserve Your Spot
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- DURBAN -->
+      <div class="col-lg-6">
+
+        <div class="trip-card-modern">
+
+          <div class="trip-top">
+
+            <h3>Durban Beach Experience</h3>
+
+            <p>
+              <i class="bi bi-calendar-event me-2"></i>
+              1 – 4 October 2026
+            </p>
+
+            <div class="trip-price">
+              R5 950
+            </div>
+
+          </div>
+
+          <div class="trip-body">
+
+            <ul>
+              <li><i class="bi bi-check-circle-fill"></i>Luxury transport included</li>
+              <li><i class="bi bi-check-circle-fill"></i>3 Nights accommodation</li>
+              <li><i class="bi bi-check-circle-fill"></i>Boat cruise experience</li>
+              <li><i class="bi bi-check-circle-fill"></i>South Beach adventure</li>
+              <li><i class="bi bi-check-circle-fill"></i>Durban nightlife</li>
+              <li><i class="bi bi-check-circle-fill"></i>City tour included</li>
+            </ul>
+
+            <a href="{{ url_for('contact') }}" class="btn btn-primary-custom w-100">
+              Book Durban Trip
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- HISTORY -->
+<section class="modern-section">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <span class="section-mini">Our Journey</span>
+      <h2 class="section-heading">KingSTrips History</h2>
+    </div>
+
+    <div class="timeline-modern">
+
+      <div class="timeline-item">
+        <div class="timeline-year">2022</div>
+        <h4 class="fw-bold mt-3">The Beginning</h4>
+
+        <p class="text-muted">
+          KingSTrips started with a vision to create
+          affordable, safe and unforgettable travel
+          experiences for schools and groups.
+        </p>
+
+        <span class="achievement-badge">First Durban Tour</span>
+        <span class="achievement-badge">15 Travellers</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-year">2024</div>
+        <h4 class="fw-bold mt-3">International Expansion</h4>
+
+        <p class="text-muted">
+          We successfully launched our first
+          international travel experience and expanded
+          into corporate retreats.
+        </p>
+
+        <span class="achievement-badge">Maputo Tours</span>
+        <span class="achievement-badge">Corporate Retreats</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-year">2026</div>
+        <h4 class="fw-bold mt-3">Growing Bigger</h4>
+
+        <p class="text-muted">
+          Today KingSTrips serves schools, churches,
+          organisations and travel groups across
+          Southern Africa.
+        </p>
+
+        <span class="achievement-badge">100+ Travellers</span>
+        <span class="achievement-badge">5+ Destinations</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- GALLERY -->
+<section class="modern-section bg-light" id="gallery">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <span class="section-mini">Gallery</span>
+      <h2 class="section-heading">Travel Memories</h2>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="d-flex justify-content-center flex-wrap gap-3 mb-5 gallery-filter">
+
+      <button class="active">All</button>
+      <button>Photos</button>
+      <button>Videos</button>
+      <button>Durban</button>
+      <button>Cape Town</button>
+
+    </div>
+
+<!-- GALLERY GRID -->
+    <div class="row g-4" id="galleryGrid">
+
+    </div>
+
+    <!-- MEMORY CARDS -->
+    <div class="row mt-5 g-4" id="memoryGrid">
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SHARE MEMORIES -->
+<section class="modern-section">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <span class="section-mini">Share Moments</span>
+      <h2 class="section-heading">Upload Your Memories</h2>
+    </div>
+
+    <div class="upload-modern">
+
+      <div class="upload-icon">
+        <i class="bi bi-cloud-arrow-up-fill"></i>
+      </div>
+
+      <h3 class="fw-bold mb-3">
+        Drag & Drop Your Photos & Videos
+      </h3>
+
+      <p class="text-muted mb-4">
+        Upload your travel moments and get featured
+        on the KingSTrips gallery.
+      </p>
+
+      <input
+        type="file"
+        id="fileUpload"
+        multiple
+        accept="image/*,video/*"
+        hidden
+      >
+
+      <button
+        class="btn btn-primary-custom"
+        onclick="document.getElementById('fileUpload').click()"
+      >
+        Choose Files
+      </button>
+
+      <div class="mt-4">
+        <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+          JPG / PNG / MP4 Supported
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CTA -->
+<section class="modern-section">
+
+  <div class="container">
+
+    <div class="cta-modern">
+
+      <h2 class="display-5 fw-bold mb-4">
+        Ready For Your Next Adventure?
+      </h2>
+
+      <p class="fs-5 mb-4">
+        Join KingSTrips for unforgettable luxury
+        travel experiences across Southern Africa.
+      </p>
+
+      <a href="{{ url_for('contact') }}" class="btn btn-glow">
+        Contact KingSTrips
+      </a>
+
+      <div class="social-modern">
+
+        <a href="https://wa.me/27647625369" target="_blank">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+
+        <a href="https://www.tiktok.com/@kingstrips" target="_blank">
+          <i class="fab fa-tiktok"></i>
+        </a>
+
+        <a href="https://www.facebook.com/share/1DiEDpWb55/" target="_blank">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+{% endblock %}

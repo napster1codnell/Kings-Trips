@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Admin Dashboard | KingSTrips</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+
+    /* ─────────────────────────
+       GLOBAL
+    ───────────────────────── */
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family:'Outfit',sans-serif;
+      background:#f1f5f9;
+      color:#0f172a;
+      overflow-x:hidden;
+    }
+
+    a{
+      text-decoration:none;
+    }
+
+    /* ─────────────────────────
+       LAYOUT
+    ───────────────────────── */
+    .admin-layout{
+      display:flex;
+      width:100%;
+      min-height:100vh;
+    }
+
+    /* ─────────────────────────
+       SIDEBAR
+    ───────────────────────── */
+    .admin-sidebar{
+      width:260px;
+      background:#0f172a;
+      color:white;
+      padding:2rem 1.5rem;
+      position:fixed;
+      top:0;
+      left:0;
+      bottom:0;
+      overflow-y:auto;
+      z-index:1000;
+      transition:.3s ease;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .sidebar-brand{
+      font-size:1.55rem;
+      font-weight:800;
+      margin-bottom:.4rem;
+      color:white;
+    }
+
+    .sidebar-sub{
+      font-size:.88rem;
+      color:rgba(255,255,255,.6);
+      margin-bottom:2rem;
+    }
+
+    .sidebar-nav{
+      list-style:none;
+      padding:0;
+      margin:0;
+      flex:1;
+    }
+
+    .sidebar-nav li{
+      margin-bottom:.55rem;
+    }
+
+    .sidebar-nav a{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:13px 14px;
+      border-radius:15px;
+      color:rgba(255,255,255,.75);
+      font-size:.95rem;
+      font-weight:600;
+      transition:.25s ease;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active{
+      background:rgba(13,110,253,.22);
+      color:white;
+      transform:translateX(4px);
+    }
+
+    .sidebar-footer{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:1.4rem;
+      margin-top:2rem;
+    }
+
+    .sidebar-footer a{
+      color:rgba(255,255,255,.7);
+      font-weight:500;
+      transition:.25s ease;
+    }
+
+    .sidebar-footer a:hover{
+      color:#ef4444;
+    }
+
+    /* ─────────────────────────
+       CONTENT
+    ───────────────────────── */
+    .admin-content{
+      margin-left:260px;
+      width:calc(100% - 260px);
+      padding:2rem;
+      min-width:0;
+    }
+
+    /* ─────────────────────────
+       MOBILE TOPBAR
+    ───────────────────────── */
+    .mobile-topbar{
+      display:none;
+      align-items:center;
+      justify-content:space-between;
+      background:white;
+      padding:1rem;
+      border-radius:18px;
+      margin-bottom:1.5rem;
+      box-shadow:0 10px 30px rgba(15,23,42,.06);
+    }
+
+    .mobile-topbar .brand{
+      font-size:1.1rem;
+      font-weight:800;
+      color:#0f172a;
+    }
+
+    .menu-btn{
+      width:44px;
+      height:44px;
+      border:none;
+      border-radius:12px;
+      background:#0d6efd;
+      color:white;
+      font-size:1.2rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* ─────────────────────────
+       OVERLAY
+    ───────────────────────── */
+    .sidebar-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      z-index:999;
+      opacity:0;
+      visibility:hidden;
+      transition:.3s ease;
+    }
+
+    .sidebar-overlay.show{
+      opacity:1;
+      visibility:visible;
+    }
+
+    /* ─────────────────────────
+       HEADER
+    ───────────────────────── */
+    .admin-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom:2rem;
+    }
+
+    .admin-header h2{
+      font-size:clamp(1.5rem,3vw,2rem);
+      font-weight:800;
+      margin:0;
+    }
+
+    /* ─────────────────────────
+       STAT CARDS
+    ───────────────────────── */
+    .stat-row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:1.25rem;
+      margin-bottom:2rem;
+    }
+
+    .stat-card{
+      background:white;
+      border-radius:24px;
+      padding:1.5rem;
+      box-shadow:0 10px 30px rgba(15,23,42,.05);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .stat-card::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:4px;
+      background:#0d6efd;
+    }
+
+    .stat-card.yellow::before{ background:#f59e0b; }
+    .stat-card.green::before{ background:#10b981; }
+    .stat-card.red::before{ background:#ef4444; }
+    .stat-card.blue::before{ background:#0d6efd; }
+    .stat-card.purple::before{ background:#7c3aed; }
+    .stat-card.orange::before{ background:#f97316; }
+    .stat-card.teal::before{ background:#14b8a6; }
+
+    .stat-label{
+      font-size:.78rem;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+      font-weight:700;
+      color:#64748b;
+    }
+
+    .stat-value{
+      font-size:clamp(1.9rem,4vw,2.6rem);
+      font-weight:800;
+      margin:.7rem 0 .2rem;
+      line-height:1.1;
+      word-break:break-word;
+      color:#0d6efd;
+    }
+
+    .small-value{
+      font-size:1.08rem !important;
+      line-height:1.5;
+    }
+
+    .stat-card.yellow .stat-value{ color:#f59e0b; }
+    .stat-card.green .stat-value{ color:#10b981; }
+    .stat-card.red .stat-value{
+      color:#ef4444;
+      font-size:1rem;
+      line-height:1.5;
+    }
+    .stat-card.blue .stat-value{ color:#0d6efd; }
+    .stat-card.purple .stat-value{ color:#7c3aed; }
+    .stat-card.orange .stat-value{ color:#f97316; }
+    .stat-card.teal .stat-value{ color:#14b8a6; }
+
+    .stat-card small{
+      display:block;
+      margin-top:.4rem;
+      color:#94a3b8;
+      font-size:.82rem;
+    }
+
+    /* ─────────────────────────
+       CHARTS
+    ───────────────────────── */
+    .charts-row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:1.25rem;
+      margin-bottom:2rem;
+    }
+
+    .chart-card{
+      background:white;
+      border-radius:24px;
+      padding:1.5rem;
+      box-shadow:0 10px 30px rgba(15,23,42,.05);
+      overflow:hidden;
+    }
+
+    .chart-card h3{
+      font-size:1.05rem;
+      font-weight:700;
+      margin-bottom:1.25rem;
+      line-height:1.5;
+    }
+
+    .chart-container{
+      position:relative;
+      width:100%;
+      height:320px;
+    }
+
+    /* ─────────────────────────
+       TABLES
+    ───────────────────────── */
+    .table-card{
+      background:white;
+      border-radius:24px;
+      padding:1.5rem;
+      box-shadow:0 10px 30px rgba(15,23,42,.05);
+      margin-bottom:2rem;
+      overflow:hidden;
+    }
+
+    .table-card h3{
+      font-size:1.1rem;
+      font-weight:700;
+      margin-bottom:1.2rem;
+    }
+
+    .table-responsive{
+      width:100%;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+      width:100%;
+      min-width:850px;
+      border-collapse:collapse;
+    }
+
+    thead tr{
+      background:#f8fafc;
+    }
+
+    th{
+      padding:14px;
+      text-align:left;
+      font-size:.74rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      color:#64748b;
+      white-space:nowrap;
+      border-bottom:2px solid #e2e8f0;
+    }
+
+    td{
+      padding:14px;
+      border-bottom:1px solid #f1f5f9;
+      vertical-align:middle;
+      white-space:nowrap;
+      font-size:.9rem;
+    }
+
+    tbody tr{
+      transition:.25s ease;
+    }
+
+    tbody tr:hover{
+      background:#f8fafc;
+    }
+
+    td a{
+      color:#0d6efd;
+      font-weight:500;
+    }
+
+    td a:hover{
+      text-decoration:underline;
+    }
+
+    /* ─────────────────────────
+       BADGES
+    ───────────────────────── */
+    .badge-new{
+      background:#dbeafe;
+      color:#1d4ed8;
+      padding:5px 12px;
+      border-radius:50px;
+      font-size:.72rem;
+      font-weight:700;
+    }
+
+    .badge-viewed{
+      background:#ecfeff;
+      color:#0f766e;
+      padding:5px 12px;
+      border-radius:50px;
+      font-size:.72rem;
+      font-weight:700;
+    }
+
+    /* ─────────────────────────
+       EMPTY STATE
+    ───────────────────────── */
+    .empty-state{
+      text-align:center;
+      padding:4rem 1rem;
+      color:#94a3b8;
+    }
+
+    .empty-state i{
+      font-size:3rem;
+      display:block;
+      margin-bottom:1rem;
+    }
+
+    /* ─────────────────────────
+       TABLET
+    ───────────────────────── */
+    @media(max-width:992px){
+
+      .admin-sidebar{
+        transform:translateX(-100%);
+      }
+
+      .admin-sidebar.show{
+        transform:translateX(0);
+      }
+
+      .mobile-topbar{
+        display:flex;
+      }
+
+      .admin-content{
+        margin-left:0;
+        width:100%;
+        padding:1rem;
+      }
+
+    }
+
+    /* ─────────────────────────
+       MOBILE
+    ───────────────────────── */
+    @media(max-width:768px){
+
+      .admin-header{
+        align-items:flex-start;
+      }
+
+      .chart-container{
+        height:260px;
+      }
+
+      .chart-card,
+      .table-card,
+      .stat-card{
+        padding:1.2rem;
+        border-radius:20px;
+      }
+
+      th,
+      td{
+        padding:12px;
+        font-size:.82rem;
+      }
+
+    }
+
+    /* ─────────────────────────
+       SMALL DEVICES
+    ───────────────────────── */
+    @media(max-width:480px){
+
+      .admin-content{
+        padding:.85rem;
+      }
+
+      .chart-container{
+        height:230px;
+      }
+
+      .stat-value{
+        font-size:1.75rem;
+      }
+
+      .small-value{
+        font-size:.95rem !important;
+      }
+
+      .chart-card,
+      .table-card,
+      .stat-card{
+        padding:1rem;
+      }
+
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="sidebar">
+
+    <div class="sidebar-brand">🛡️ KingSTrips</div>
+    <div class="sidebar-sub">Admin Dashboard</div>
+
+    <ul class="sidebar-nav">
+
+      <li>
+        <a href="{{ url_for('admin_dashboard') }}" class="active">
+          <i class="bi bi-speedometer2"></i>
+          Dashboard
+        </a>
+      </li>
+
+      <li>
+        <a href="{{ url_for('contact') }}" target="_blank">
+          <i class="bi bi-globe2"></i>
+          View Website
+        </a>
+      </li>
+
+    </ul>
+
+    <div class="sidebar-footer">
+      <a href="{{ url_for('admin_logout') }}">
+        <i class="bi bi-box-arrow-right"></i>
+        Sign Out
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-content">
+
+    <!-- MOBILE TOPBAR -->
+    <div class="mobile-topbar">
+
+      <button class="menu-btn" id="menuBtn">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <div class="brand">🛡️ KingSTrips</div>
+
+    </div>
+
+    <!-- HEADER -->
+    <div class="admin-header">
+
+      <h2>Dashboard</h2>
+
+      <span class="badge bg-white text-dark px-3 py-2 shadow-sm">
+        {{ datetime.utcnow().strftime('%B %d, %Y') }}
+      </span>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="stat-row">
+
+      <div class="stat-card">
+        <div class="stat-label">Total Enquiries</div>
+        <div class="stat-value">{{ total_enquiries }}</div>
+        <small>All-time form submissions</small>
+      </div>
+
+      <div class="stat-card yellow">
+        <div class="stat-label">New</div>
+        <div class="stat-value">{{ unanswered }}</div>
+        <small>Awaiting your response</small>
+      </div>
+
+      <div class="stat-card green">
+        <div class="stat-label">Email Sent</div>
+        <div class="stat-value">{{ viewed }}</div>
+        <small>Automated replies delivered</small>
+      </div>
+
+      <div class="stat-card red">
+        <div class="stat-label">Contact Admin</div>
+
+        <div class="stat-value">
+          <a href="mailto:{{ ADMIN_EMAIL or 'admin@example.com' }}"
+             style="color:#ef4444;word-break:break-word;">
+            {{ ADMIN_EMAIL or 'admin@example.com' }}
+          </a>
+        </div>
+
+        <small>Where replies arrive</small>
+      </div>
+
+    </div>
+
+    <!-- SECOND ROW -->
+    <div class="stat-row">
+
+      <div class="stat-card">
+        <div class="stat-label">Response Rate</div>
+        <div class="stat-value">{{ response_rate }}%</div>
+        <small>Viewed of total enquiries</small>
+      </div>
+
+      <div class="stat-card green">
+        <div class="stat-label">Destinations</div>
+        <div class="stat-value">{{ all_destinations }}</div>
+        <small>Unique destinations booked</small>
+      </div>
+
+      <div class="stat-card yellow">
+        <div class="stat-label">Trip Types</div>
+        <div class="stat-value">{{ all_trip_types }}</div>
+        <small>Different trip categories</small>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Avg Group Size</div>
+        <div class="stat-value">{{ avg_group_size }}</div>
+        <small>Average travellers / enquiry</small>
+      </div>
+
+    </div>
+
+    <!-- THIRD ROW -->
+    <div class="stat-row">
+
+      <div class="stat-card blue">
+        <div class="stat-label">Most Popular Trip</div>
+        <div class="stat-value small-value">{{ most_popular_trip }}</div>
+        <small>Highest booking category</small>
+      </div>
+
+      <div class="stat-card purple">
+        <div class="stat-label">Most Popular Dest.</div>
+        <div class="stat-value small-value">{{ most_popular_dest }}</div>
+        <small>Top destination booked</small>
+      </div>
+
+      <div class="stat-card orange">
+        <div class="stat-label">Busiest Day</div>
+        <div class="stat-value small-value">{{ most_active_day }}</div>
+        <small>{{ most_active_count }} enquiries on this day</small>
+      </div>
+
+      <div class="stat-card teal">
+        <div class="stat-label">New Today</div>
+        <div class="stat-value">{{ most_active_count }}</div>
+        <small>Enquiries on the busiest day</small>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         CHART DATA  (rendered server-side)
+    ═══════════════════════════════════════════ -->
+    <div hidden id="c-dates-labels">  {{ chart_dates_labels | safe }}</div>
+    <div hidden id="c-dates-data">    {{ chart_dates_data   | safe }}</div>
+    <div hidden id="c-dest-labels">   {{ chart_dest_labels  | safe }}</div>
+    <div hidden id="c-dest-data">     {{ chart_dest_data    | safe }}</div>
+    <div hidden id="c-trip-labels">   {{ chart_trip_labels  | safe }}</div>
+    <div hidden id="c-trip-data">     {{ chart_trip_data    | safe }}</div>
+    <div hidden id="c-month-labels">  {{ chart_month_labels | safe }}</div>
+    <div hidden id="c-month-data">    {{ chart_month_data   | safe }}</div>
+    <div hidden id="c-unanswered">    {{ unanswered }}</div>
+    <div hidden id="c-viewed">        {{ viewed }}</div>
+
+    <!-- CHARTS -->
+    <div class="charts-row">
+
+      <div class="chart-card">
+
+        <h3>
+          <i class="bi bi-graph-up" style="color:#0d6efd;"></i>
+          Enquiries – Last 14 Days
+        </h3>
+
+        <div class="chart-container">
+          <canvas id="chartDates"></canvas>
+        </div>
+
+      </div>
+
+      <div class="chart-card">
+
+        <h3>
+          <i class="bi bi-pin-map" style="color:#10b981;"></i>
+          Top Destinations
+        </h3>
+
+        <div class="chart-container">
+          <canvas id="chartDest"></canvas>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SECOND CHART ROW -->
+    <div class="charts-row">
+
+      <div class="chart-card">
+
+        <h3>
+          <i class="bi bi-calendar-check" style="color:#f59e0b;"></i>
+          Trip Type Breakdown
+        </h3>
+
+        <div class="chart-container">
+          <canvas id="chartTrip"></canvas>
+        </div>
+
+      </div>
+
+      <div class="chart-card">
+
+        <h3>
+          <i class="bi bi-pie-chart" style="color:#ef4444;"></i>
+          Status Distribution
+        </h3>
+
+        <div class="chart-container">
+          <canvas id="chartStatus"></canvas>
+        </div>
+
+      </div>
+
+      <div class="chart-card">
+
+        <h3>
+          <i class="bi bi-calendar-month" style="color:#7c3aed;"></i>
+          Monthly Enquiries
+        </h3>
+
+        <div class="chart-container">
+          <canvas id="chartMonthly"></canvas>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RECENT ENQUIRIES -->
+    <div class="table-card">
+
+      <h3>Recent Enquiries</h3>
+
+      {% if recent %}
+
+      <div class="table-responsive">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Trip</th>
+              <th>Destination</th>
+              <th>Travel Date</th>
+              <th>Pax</th>
+              <th>Budget</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            {% for s in recent %}
+            <tr>
+
+              <td>{{ loop.index }}</td>
+              <td>{{ s.ts[:10] }}</td>
+
+              <td>
+                <strong>{{ s.name }}</strong>
+              </td>
+
+              <td>
+                <a href="mailto:{{ s.email }}">
+                  {{ s.email }}
+                </a>
+              </td>
+
+              <td>{{ s.phone }}</td>
+              <td>{{ s.subject }}</td>
+              <td>{{ s.destination }}</td>
+              <td>{{ s.travel_date }}</td>
+              <td>{{ s.travellers }}</td>
+              <td>{{ s.budget }}</td>
+
+              <td>
+                {% if s.status %}
+                  <span class="badge-viewed">Viewed</span>
+                {% else %}
+                  <span class="badge-new">New</span>
+                {% endif %}
+              </td>
+
+            </tr>
+            {% endfor %}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      {% else %}
+
+      <div class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <p>No enquiries yet. Submissions will appear here.</p>
+      </div>
+
+      {% endif %}
+
+    </div>
+
+  </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+  // MOBILE SIDEBAR
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('show');
+    overlay.classList.toggle('show');
+  });
+
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('show');
+    overlay.classList.remove('show');
+  });
+
+  // ═══ CHART DATA  (parsed from hidden DOM elements) ══
+  const _DATES_LABELS  = JSON.parse(document.getElementById('c-dates-labels').textContent);
+  const _DATES_DATA    = JSON.parse(document.getElementById('c-dates-data').textContent);
+  const _DEST_LABELS   = JSON.parse(document.getElementById('c-dest-labels').textContent);
+  const _DEST_DATA     = JSON.parse(document.getElementById('c-dest-data').textContent);
+  const _TRIP_LABELS   = JSON.parse(document.getElementById('c-trip-labels').textContent);
+  const _TRIP_DATA     = JSON.parse(document.getElementById('c-trip-data').textContent);
+  const _MONTH_LABELS  = JSON.parse(document.getElementById('c-month-labels').textContent);
+  const _MONTH_DATA    = JSON.parse(document.getElementById('c-month-data').textContent);
+  const _UNANSWERED    = +document.getElementById('c-unanswered').textContent;
+  const _VIEWED        = +document.getElementById('c-viewed').textContent;
+
+  // CHART SETTINGS
+  const PALETTE = [
+    '#0d6efd',
+    '#10b981',
+    '#f59e0b',
+    '#ef4444',
+    '#7c3aed',
+    '#14b8a6',
+    '#f97316',
+    '#6366f1'
+  ];
+
+  const gridColor = '#f1f5f9';
+  const textColor = '#64748b';
+
+  function getScales(chartType) {
+    if (chartType === 'doughnut' || chartType === 'pie') return {};
+    return {
+      x: {
+        grid: { color: gridColor, drawBorder: false },
+        ticks: {
+          color: textColor,
+          font: { family: 'Outfit', size: 11 }
+        }
+      },
+      y: {
+        grid: { color: gridColor, drawBorder: false },
+        ticks: {
+          color: textColor,
+          font: { family: 'Outfit', size: 11 }
+        },
+        beginAtZero: true
+      }
+    };
+  }
+
+  const sharedOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: textColor,
+          font: { family: 'Outfit', size: 12 }
+        }
+      }
+    },
+    scales: getScales
+  };
+
+  // Helper: build dataset with overflow guards
+  function ds(label, data, extra) {
+    return Object.assign({ label, data }, extra || {});
+  }
+
+  // LINE CHART (14-day trend)
+  new Chart(document.getElementById('chartDates'), {
+    type: 'line',
+    data: {
+      labels: _DATES_LABELS,
+      datasets: [ds('Enquiries', _DATES_DATA, {
+        borderColor: '#0d6efd',
+        backgroundColor: 'rgba(13,110,253,.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 5,
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#0d6efd',
+        pointBorderWidth: 2
+      })]
+    },
+    options: Object.assign({}, sharedOpts, {
+      animation: { duration: 800, easing: 'easeInOutQuart' }
+    })
+  });
+
+  // DESTINATIONS BAR CHART
+  new Chart(document.getElementById('chartDest'), {
+    type: 'bar',
+    data: {
+      labels: _DEST_LABELS,
+      datasets: [ds('Enquiries', _DEST_DATA, {
+        backgroundColor: PALETTE.map(c => c + 'cc'),
+        borderRadius: 10,
+        borderSkipped: false
+      })]
+    },
+    options: sharedOpts
+  });
+
+  // TRIP TYPES BAR CHART
+  new Chart(document.getElementById('chartTrip'), {
+    type: 'bar',
+    data: {
+      labels: _TRIP_LABELS,
+      datasets: [ds('Enquiries', _TRIP_DATA, {
+        backgroundColor: PALETTE.map(c => c + 'cc'),
+        borderRadius: 10,
+        borderSkipped: false
+      })]
+    },
+    options: sharedOpts
+  });
+
+  // STATUS DOUGHNUT (New vs Viewed)
+  new Chart(document.getElementById('chartStatus'), {
+    type: 'doughnut',
+    data: {
+      labels: ['New', 'Viewed'],
+      datasets: [ds('Enquiries', [_UNANSWERED, _VIEWED], {
+        backgroundColor: ['#ef4444', '#10b981'],
+        borderWidth: 4,
+        borderColor: '#fff',
+        hoverOffset: 10
+      })]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: textColor,
+            font: { family: 'Outfit', size: 12 }
+          }
+        }
+      }
+    }
+  });
+
+  // MONTHLY ENQUIRIES BAR CHART (last 6 months)
+  new Chart(document.getElementById('chartMonthly'), {
+    type: 'bar',
+    data: {
+      labels: _MONTH_LABELS,
+      datasets: [ds('Enquiries', _MONTH_DATA, {
+        backgroundColor: 'rgba(124,58,237,.2)',
+        borderColor: '#7c3aed',
+        borderWidth: 2,
+        borderRadius: 10,
+        borderSkipped: false,
+        tension: 0.4
+      })]
+    },
+    options: sharedOpts
+  });
+
+</script>
+
+</body>
+</html>

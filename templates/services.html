@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block title %}Services | KingSTrips{% endblock %}
+
+{% block styles %}
+<style>
+
+/* ======================
+   HERO
+====================== */
+
+.hero-services{
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  color: white;
+  background:
+    linear-gradient(135deg, rgba(13,110,253,0.85), rgba(15,23,42,0.9)),
+    url('{{ url_for("static", filename="images/table_mountain.jpg") }}') center/cover;
+}
+
+.hero-services::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+}
+
+.hero-content{
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.hero-title{
+  font-size: 3.2rem;
+  font-weight: 800;
+}
+
+.hero-lead{
+  opacity: 0.9;
+  font-size: 1.1rem;
+}
+
+/* ======================
+   SERVICES
+====================== */
+
+.card-custom{
+  background: white;
+  border-radius: 28px;
+  padding: 2.5rem;
+  border: 1px solid rgba(15,23,42,0.08);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+  height: 100%;
+  transition: 0.3s ease;
+}
+
+.card-custom:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+}
+
+.card-custom i{
+  font-size: 3rem;
+  color: #0d6efd;
+  margin-bottom: 1rem;
+}
+
+.card-custom h5{
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #0f172a;
+}
+
+/* ======================
+   CONTACT
+====================== */
+
+.contact-section{
+  background: linear-gradient(135deg, #0d6efd, #0b1d39);
+  color: white;
+  padding: 60px 40px;
+  border-radius: 28px;
+  text-align: center;
+}
+
+.contact-section a{
+  color: white;
+}
+
+.contact-section a:hover{
+  color: var(--accent);
+}
+
+.social-icons a{
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  margin: 0 8px;
+  transition: 0.3s ease;
+}
+
+.social-icons a:hover{
+  background: var(--primary);
+  transform: translateY(-5px);
+}
+
+@media(max-width:768px){
+  .hero-title{
+    font-size: 2.2rem;
+  }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-services">
+  <div class="container hero-content">
+    <h1 class="hero-title">Our Services</h1>
+    <p class="hero-lead">Comprehensive travel solutions for every need</p>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title">What We <span class="text-primary">Offer</span></h2>
+    <p class="section-subtitle">From educational school trips to corporate retreats</p>
+    
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card-custom text-center">
+          <i class="bi bi-backpack"></i>
+          <h5>School Trips</h5>
+          <p>Educational tours, grade camps and heritage visits designed for learning and fun.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-custom text-center">
+          <i class="bi bi-people"></i>
+          <h5>Group & Leisure Tours</h5>
+          <p>Durban, Cape Town, Maputo and customised travel packages for all group sizes.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-custom text-center">
+          <i class="bi bi-briefcase"></i>
+          <h5>Corporate & Church Trips</h5>
+          <p>Team-building retreats, conferences and organised outings with professional planning.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section">
+  <div class="container">
+    <div class="contact-section">
+      <h2 class="mb-4">Ready to Plan Your Trip?</h2>
+      <p class="fs-5 mb-4">
+        <i class="bi bi-telephone-fill me-2"></i> 
+        <a href="tel:0647625369" class="text-white text-decoration-none">064 762 5369</a> | 
+        <a href="tel:0672987440" class="text-white text-decoration-none">067 298 7440</a>
+      </p>
+      <div class="social-icons">
+        <a href="https://wa.me/27647625369" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.tiktok.com/@kingstrips" target="_blank"><i class="fab fa-tiktok"></i></a>
+        <a href="https://www.facebook.com/share/1DiEDpWb55/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% block title %}Contact | KingSTrips{% endblock %}
+
+{% block styles %}
+<style>
+
+/* =========================
+   HERO
+========================= */
+
+.hero-contact{
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  color: white;
+  background:
+    linear-gradient(135deg, rgba(13,110,253,0.85), rgba(15,23,42,0.9)),
+    url('{{ url_for("static", filename="images/school1.jpg") }}') center/cover;
+}
+
+.hero-contact::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+}
+
+.hero-contact .container{
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.hero-contact h1{
+  font-size: 3.2rem;
+  font-weight: 800;
+}
+
+.hero-contact p{
+  opacity: 0.9;
+  font-size: 1.1rem;
+}
+
+/* =========================
+   CONTACT CARD
+========================= */
+
+.contact-card{
+  background: white;
+  border-radius: 28px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* =========================
+   CONTACT INFO
+========================= */
+
+.contact-info{
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.contact-info p{
+  margin-bottom: 0.6rem;
+  color: #475569;
+}
+
+.contact-icons{
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.contact-icons a{
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(13,110,253,0.08);
+  color: #0d6efd;
+  font-size: 1.2rem;
+  transition: 0.3s ease;
+}
+
+.contact-icons a:hover{
+  background: #0d6efd;
+  color: white;
+  transform: translateY(-4px);
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-control{
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(15,23,42,0.1);
+  transition: 0.3s ease;
+}
+
+.form-control:focus{
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 4px rgba(13,110,253,0.1);
+}
+
+textarea.form-control{
+  resize: none;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.btn-send{
+  width: 100%;
+  padding: 14px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, #0d6efd, #004fc7);
+  color: white;
+  font-weight: 700;
+  border: none;
+  transition: 0.3s ease;
+}
+
+.btn-send:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(13,110,253,0.3);
+  color: white;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+#status{
+  text-align: center;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+  .hero-contact h1{
+    font-size: 2.2rem;
+  }
+
+  .contact-card{
+    padding: 2rem;
+  }
+
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-contact">
+
+  <div class="container">
+
+    <h1>Contact Us</h1>
+    <p>Let’s plan your next unforgettable travel experience</p>
+
+  </div>
+
+</section>
+
+<!-- CONTACT SECTION -->
+<section class="section">
+
+  <div class="container">
+
+    <div class="row justify-content-center">
+
+      <div class="col-lg-8">
+
+        <div class="contact-card">
+
+          <!-- INFO -->
+          <div class="contact-info">
+
+            <div class="contact-icons">
+
+              <a href="tel:0647625369"><i class="bi bi-telephone-fill"></i></a>
+
+              <a href="https://wa.me/27647625369" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+
+              <a href="https://www.tiktok.com/@kingstrips" target="_blank">
+                <i class="fab fa-tiktok"></i>
+              </a>
+
+              <a href="https://www.facebook.com/share/1DiEDpWb55/" target="_blank">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+
+            </div>
+
+            <p><i class="bi bi-telephone-fill text-primary me-2"></i> 064 762 5369 | 067 298 7440</p>
+            <p><i class="bi bi-envelope-fill text-primary me-2"></i> info@kingstrips.co.za</p>
+
+          </div>
+
+          <!-- FORM -->
+         <form id="contact-form" class="row g-3">
+
+  <!-- PERSONAL DETAILS -->
+  <div class="col-12">
+    <h5 class="mb-3 fw-bold text-primary">Travel Enquiry Form</h5>
+  </div>
+
+  <div class="col-md-6">
+    <input type="text" name="user_name" class="form-control" placeholder="Full Name" required>
+  </div>
+
+  <div class="col-md-6">
+    <input type="email" name="user_email" class="form-control" placeholder="Email Address" required>
+  </div>
+
+  <div class="col-md-6">
+    <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required>
+  </div>
+
+  <div class="col-md-6">
+    <input type="text" name="subject" class="form-control" placeholder="Subject (e.g. School Trip, Holiday, Tour)" required>
+  </div>
+
+  <!-- TRAVEL DETAILS -->
+  <div class="col-md-6">
+    <input type="text" name="destination" class="form-control" placeholder="Destination (e.g. Cape Town, Durban, Namibia)" required>
+  </div>
+
+  <div class="col-md-6">
+    <input type="date" name="travel_date" class="form-control" required>
+  </div>
+
+  <div class="col-md-6">
+    <input type="number" name="travellers" class="form-control" placeholder="Number of Travellers" min="1" required>
+  </div>
+
+  <div class="col-md-6">
+    <select name="budget" class="form-control" required>
+      <option value="" disabled selected>Budget Range</option>
+      <option>Below R3,000</option>
+      <option>R3,000 - R7,000</option>
+      <option>R7,000 - R15,000</option>
+      <option>R15,000 - R30,000</option>
+      <option>R30,000+</option>
+    </select>
+  </div>
+
+  <!-- MESSAGE -->
+  <div class="col-12">
+    <textarea name="message" rows="5" class="form-control" placeholder="Additional Message (special requests, notes, etc.)"></textarea>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="col-12">
+    <button type="submit" class="btn-send">
+      Send Travel Enquiry
+    </button>
+  </div>
+
+  <!-- STATUS -->
+  <div class="col-12">
+    <p id="status"></p>
+  </div>
+
+</form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+document.getElementById("contact-form").addEventListener("submit", async function(e){
+
+  e.preventDefault();
+
+  const formData = {
+    user_name:    this.user_name.value,
+    user_email:   this.user_email.value,
+    phone:        this.phone.value,
+    subject:      this.subject.value,
+    destination:  this.destination.value,
+    travel_date:  this.travel_date.value,
+    travellers:   this.travellers.value,
+    budget:       this.budget.value,
+    message:      this.message.value
+  };
+
+  try {
+
+    const response = await fetch("/contact", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify(formData)
+
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+
+      document.getElementById("status").innerHTML =
+        "✅ Message sent successfully! We will contact you soon.";
+
+      this.reset();
+
+    } else {
+
+      document.getElementById("status").innerHTML =
+        `❌ ${result.message || "Failed to send message."}`;
+
+    }
+
+  } catch (error) {
+
+    console.log(error);
+
+    document.getElementById("status").innerHTML =
+      "❌ Failed to send message. Please try again.";
+
+  }
+
+});
+
+</script>
+
+{% endblock %}

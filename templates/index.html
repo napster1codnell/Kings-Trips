@@ -1,0 +1,748 @@
+{% extends "base.html" %}
+{% block title %}KingSTrips | Explore Beyond Limits{% endblock %}
+
+{% block styles %}
+<style>
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero-modern {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.hero-modern video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-modern::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(5, 10, 20, 0.92),
+      rgba(13, 110, 253, 0.75)
+    );
+  z-index: 1;
+}
+
+.hero-modern .container {
+  position: relative;
+  z-index: 3;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 10px 18px;
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.hero-modern h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.hero-modern h1 span {
+  color: #ffb703;
+}
+
+.hero-modern p {
+  font-size: 1.15rem;
+  max-width: 650px;
+  opacity: 0.92;
+  margin-bottom: 2rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-glow {
+  background: white;
+  color: #0d6efd;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  transition: 0.3s ease;
+}
+
+.btn-glow:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(255,255,255,0.2);
+}
+
+.btn-dark-glass {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  backdrop-filter: blur(10px);
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+.btn-dark-glass:hover {
+  background: white;
+  color: #0d6efd;
+}
+
+/* =========================
+   FLOATING STATS
+========================= */
+
+.stats-wrapper {
+  margin-top: -80px;
+  position: relative;
+  z-index: 5;
+}
+
+.stats-card {
+  background: white;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+.stat-box {
+  text-align: center;
+}
+
+.stat-box h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0d6efd;
+}
+
+.stat-box p {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* =========================
+   SECTION DESIGN
+========================= */
+
+.modern-section {
+  padding: 100px 0;
+}
+
+.section-mini {
+  color: #0d6efd;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.section-heading {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.section-text {
+  color: #6b7280;
+  font-size: 1.05rem;
+}
+
+/* =========================
+   SERVICES
+========================= */
+
+.service-card-modern {
+  background: white;
+  border-radius: 24px;
+  padding: 2.2rem;
+  height: 100%;
+  transition: 0.4s ease;
+  border: 1px solid rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card-modern::before {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: rgba(13,110,253,0.06);
+  border-radius: 50%;
+  top: -40px;
+  right: -40px;
+}
+
+.service-card-modern:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+}
+
+.service-icon-modern {
+  width: 75px;
+  height: 75px;
+  background: linear-gradient(135deg, #0d6efd, #2563eb);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* =========================
+   DESTINATIONS
+========================= */
+
+.destination-card {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  height: 420px;
+}
+
+.destination-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.5s ease;
+}
+
+.destination-card:hover img {
+  transform: scale(1.08);
+}
+
+.destination-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.85),
+    rgba(0,0,0,0.1)
+  );
+  display: flex;
+  align-items: end;
+  padding: 2rem;
+}
+
+.destination-content h3 {
+  color: white;
+  font-weight: 700;
+}
+
+.destination-content p {
+  color: rgba(255,255,255,0.85);
+}
+
+/* =========================
+   TRIPS
+========================= */
+
+.trip-card-modern {
+  background: white;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+  height: 100%;
+}
+
+.trip-top {
+  background: linear-gradient(135deg, #0d6efd, #2563eb);
+  color: white;
+  padding: 2rem;
+}
+
+.trip-price {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.trip-body {
+  padding: 2rem;
+}
+
+.trip-body ul {
+  list-style: none;
+  padding: 0;
+}
+
+.trip-body ul li {
+  margin-bottom: 1rem;
+}
+
+.trip-body ul li i {
+  color: #0d6efd;
+  margin-right: 10px;
+}
+
+/* =========================
+   CTA SECTION
+========================= */
+
+.cta-modern {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(13,110,253,0.92),
+      rgba(37,99,235,0.92)
+    ),
+    url('{{ url_for("static", filename="images/capetown.jpg") }}')
+    center/cover;
+  border-radius: 40px;
+  padding: 5rem 2rem;
+  text-align: center;
+  color: white;
+}
+
+.social-modern {
+  margin-top: 2rem;
+}
+
+.social-modern a {
+  width: 55px;
+  height: 55px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.12);
+  border-radius: 50%;
+  margin: 0 8px;
+  color: white;
+  font-size: 1.3rem;
+  transition: 0.3s ease;
+}
+
+.social-modern a:hover {
+  background: white;
+  color: #0d6efd;
+  transform: translateY(-5px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 768px){
+
+  .hero-modern h1{
+    font-size: 2.5rem;
+  }
+
+  .section-heading{
+    font-size: 2rem;
+  }
+
+  .stats-wrapper{
+    margin-top: -40px;
+  }
+
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-modern">
+
+  <video autoplay muted loop playsinline>
+    <source src="{{ url_for('static', filename='images/hero.mp4') }}" type="video/mp4">
+  </video>
+
+  <div class="container">
+
+    <div class="hero-badge">
+      <i class="bi bi-stars"></i>
+      Premium Travel Experiences Across Southern Africa
+    </div>
+
+    <h1>
+      Explore The World <br>
+      <span>With KingSTrips</span>
+    </h1>
+
+    <p>
+      Luxury school trips, unforgettable group tours,
+      corporate retreats and travel experiences crafted
+      with comfort, safety and unforgettable memories in mind.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="{{ url_for('trips') }}" class="btn btn-glow">
+        <i class="bi bi-airplane-fill me-2"></i>
+        Explore Trips
+      </a>
+
+      <a href="{{ url_for('contact') }}" class="btn btn-dark-glass">
+        <i class="bi bi-telephone-fill me-2"></i>
+        Get In Touch
+      </a>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- STATS -->
+<div class="container stats-wrapper">
+  <div class="stats-card">
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <div class="stat-box">
+          <h2>50+</h2>
+          <p>Successful Trips</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="stat-box">
+          <h2>2K+</h2>
+          <p>Happy Travelers</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="stat-box">
+          <h2>100%</h2>
+          <p>Safe & Secure Travel</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="modern-section">
+  <div class="container">
+
+    <div class="row align-items-center g-5">
+
+      <div class="col-lg-6">
+        <span class="section-mini">About Us</span>
+
+        <h2 class="section-heading">
+          We Create Travel Experiences That Last Forever
+        </h2>
+
+        <p class="section-text">
+          KingSTrips specialises in professionally managed
+          school tours, group travel, corporate retreats and
+          church excursions throughout Southern Africa.
+          Every trip is designed to combine safety,
+          comfort, adventure and unforgettable memories.
+        </p>
+      </div>
+
+      <div class="col-lg-6">
+        <img
+          src="{{ url_for('static', filename='images/school.jpg') }}"
+          class="img-fluid rounded-5 shadow-lg"
+          alt="Travel"
+        >
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="modern-section bg-light">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <span class="section-mini">What We Offer</span>
+      <h2 class="section-heading">Premium Travel Services</h2>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <div class="service-card-modern">
+
+          <div class="service-icon-modern">
+            <i class="bi bi-backpack2-fill"></i>
+          </div>
+
+          <h4>School Trips</h4>
+
+          <p>
+            Educational tours, camps and unforgettable
+            student experiences across South Africa.
+          </p>
+
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="service-card-modern">
+
+          <div class="service-icon-modern">
+            <i class="bi bi-globe-africa"></i>
+          </div>
+
+          <h4>Group Tours</h4>
+
+          <p>
+            Durban, Cape Town, Namibia and customised
+            luxury group travel packages.
+          </p>
+
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="service-card-modern">
+
+          <div class="service-icon-modern">
+            <i class="bi bi-building"></i>
+          </div>
+
+          <h4>Corporate Retreats</h4>
+
+          <p>
+            Professional retreats, conferences and
+            team-building experiences for organisations.
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- DESTINATIONS -->
+<section class="modern-section">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <span class="section-mini">Top Destinations</span>
+      <h2 class="section-heading">Where We Take You</h2>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-lg-4">
+        <div class="destination-card">
+
+          <img src="{{ url_for('static', filename='images/durban.jpg') }}">
+
+          <div class="destination-overlay">
+            <div class="destination-content">
+              <h3>Durban</h3>
+              <p>Golden beaches and vibrant nightlife.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="destination-card">
+
+          <img src="{{ url_for('static', filename='images/capetown.jpg') }}">
+
+          <div class="destination-overlay">
+            <div class="destination-content">
+              <h3>Cape Town</h3>
+              <p>Luxury coastal adventures and iconic views.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="destination-card">
+
+          <img src="{{ url_for('static', filename='images/school.jpg') }}">
+
+          <div class="destination-overlay">
+            <div class="destination-content">
+              <h3>School Adventures</h3>
+              <p>Educational experiences designed for students.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- UPCOMING TRIPS -->
+<section class="modern-section bg-light">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <span class="section-mini">Upcoming Tours</span>
+      <h2 class="section-heading">Book Your Next Adventure</h2>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-lg-6">
+
+        <div class="trip-card-modern">
+
+          <div class="trip-top">
+
+            <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill">
+              Limited Spots Available
+            </span>
+
+            <h3>Namibia International Tour</h3>
+
+            <p>
+              <i class="bi bi-calendar-event me-2"></i>
+              24 September 2026
+            </p>
+
+            <div class="trip-price">
+              R13 530
+            </div>
+
+          </div>
+
+          <div class="trip-body">
+
+            <ul>
+              <li><i class="bi bi-check-circle-fill"></i>Flights & transfers</li>
+              <li><i class="bi bi-check-circle-fill"></i>Luxury accommodation</li>
+              <li><i class="bi bi-check-circle-fill"></i>Breakfast included</li>
+              <li><i class="bi bi-check-circle-fill"></i>Boat cruise & activities</li>
+            </ul>
+
+<a href="{{ url_for('contact') }}" class="btn btn-primary-modern w-100">
+               Reserve Your Spot
+             </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-lg-6">
+
+        <div class="trip-card-modern">
+
+          <div class="trip-top">
+
+            <h3>Durban Beach Experience</h3>
+
+            <p>
+              <i class="bi bi-calendar-event me-2"></i>
+              1 – 4 October 2026
+            </p>
+
+            <div class="trip-price">
+              R5 950
+            </div>
+
+          </div>
+
+          <div class="trip-body">
+
+            <ul>
+              <li><i class="bi bi-check-circle-fill"></i>Transport included</li>
+              <li><i class="bi bi-check-circle-fill"></i>Beach activities</li>
+              <li><i class="bi bi-check-circle-fill"></i>3 Nights accommodation</li>
+              <li><i class="bi bi-check-circle-fill"></i>City tour experience</li>
+            </ul>
+
+<a href="{{ url_for('contact') }}" class="btn btn-primary-modern w-100">
+               Book Now
+             </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CTA -->
+<section class="modern-section">
+
+  <div class="container">
+
+    <div class="cta-modern">
+
+      <h2 class="display-5 fw-bold mb-4">
+        Ready For Your Next Adventure?
+      </h2>
+
+      <p class="fs-5 mb-4">
+        Luxury travel experiences designed for schools,
+        groups, churches and organisations.
+      </p>
+
+      <a href="{{ url_for('contact') }}" class="btn btn-glow">
+        Contact KingSTrips
+      </a>
+
+      <div class="social-modern">
+
+        <a href="https://wa.me/27647625369" target="_blank">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+
+        <a href="https://www.tiktok.com/@kingstrips" target="_blank">
+          <i class="fab fa-tiktok"></i>
+        </a>
+
+        <a href="https://www.facebook.com/share/1DiEDpWb55/" target="_blank">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+{% endblock %}

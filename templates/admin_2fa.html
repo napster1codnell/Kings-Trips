@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Verify Code | KingSTrips</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
+      width:100%;
+      min-height:100%;
+    }
+
+    body{
+      font-family:'Outfit',sans-serif;
+      background:#020617;
+      overflow-x:hidden;
+      color:#0f172a;
+    }
+
+    /* ─────────────────────────
+       BACKGROUND
+    ───────────────────────── */
+
+    .login-wrapper{
+      min-height:100vh;
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      padding:clamp(1rem,3vw,2rem);
+
+      background:
+        radial-gradient(circle at top left,#2563eb 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#0ea5e9 0%,transparent 30%),
+        linear-gradient(135deg,#020617,#0f172a,#111827);
+    }
+
+    .bg-circle{
+      position:absolute;
+      border-radius:50%;
+      opacity:.15;
+      filter:blur(10px);
+      animation:float 8s ease-in-out infinite;
+      pointer-events:none;
+    }
+
+    .circle-1{
+      width:min(320px,50vw);
+      height:min(320px,50vw);
+      background:#2563eb;
+      top:-100px;
+      left:-100px;
+    }
+
+    .circle-2{
+      width:min(260px,45vw);
+      height:min(260px,45vw);
+      background:#0ea5e9;
+      right:-80px;
+      bottom:-80px;
+      animation-delay:2s;
+    }
+
+    @keyframes float{
+      0%,100%{
+        transform:translateY(0px);
+      }
+      50%{
+        transform:translateY(-18px);
+      }
+    }
+
+    /* ─────────────────────────
+       CARD
+    ───────────────────────── */
+
+    .login-card{
+      width:100%;
+      max-width:500px;
+      background:rgba(255,255,255,.96);
+      backdrop-filter:blur(18px);
+      border-radius:32px;
+      padding:clamp(1.4rem,4vw,2.8rem);
+      position:relative;
+      z-index:2;
+
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.7);
+
+      animation:fadeUp .45s ease;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(18px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* ─────────────────────────
+       LOGO
+    ───────────────────────── */
+
+    .login-logo{
+      text-align:center;
+      margin-bottom:1.7rem;
+    }
+
+    .logo-icon{
+      width:clamp(64px,15vw,82px);
+      height:clamp(64px,15vw,82px);
+      margin:0 auto 1rem;
+      border-radius:24px;
+
+      background:linear-gradient(135deg,#0d6efd,#2563eb);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      color:white;
+      font-size:clamp(1.6rem,5vw,2rem);
+
+      box-shadow:0 15px 35px rgba(37,99,235,.35);
+    }
+
+    .login-logo h1{
+      font-size:clamp(1.5rem,5vw,1.9rem);
+      font-weight:800;
+      color:#0f172a;
+      margin-bottom:.35rem;
+      word-break:break-word;
+    }
+
+    .login-logo p{
+      color:#64748b;
+      font-size:clamp(.88rem,2vw,.98rem);
+      margin:0;
+    }
+
+    /* ─────────────────────────
+       STEP BAR
+    ───────────────────────── */
+
+    .step-bar{
+      display:flex;
+      gap:.75rem;
+      margin-bottom:1.6rem;
+    }
+
+    .step-box{
+      flex:1;
+      padding:12px 10px;
+      border-radius:14px;
+      text-align:center;
+      font-size:clamp(.72rem,2vw,.82rem);
+      font-weight:700;
+      line-height:1.3;
+    }
+
+    .step-box.pending{
+      background:#f1f5f9;
+      color:#94a3b8;
+    }
+
+    .step-box.done{
+      background:#10b981;
+      color:white;
+    }
+
+    .step-box.active{
+      background:#0d6efd;
+      color:white;
+      box-shadow:0 10px 25px rgba(13,110,253,.25);
+    }
+
+    /* ─────────────────────────
+       ALERT
+    ───────────────────────── */
+
+    .alert-danger{
+      background:#fee2e2;
+      border:1px solid #fecaca;
+      color:#991b1b;
+      border-radius:16px;
+      padding:14px 16px;
+      margin-bottom:1rem;
+      font-size:.9rem;
+      font-weight:600;
+      word-wrap:break-word;
+    }
+
+    /* ─────────────────────────
+       EMAIL BOX
+    ───────────────────────── */
+
+    .email-box{
+      background:#f0fdf4;
+      border:1px solid #bbf7d0;
+      border-radius:18px;
+      padding:18px;
+      text-align:center;
+      margin-bottom:1.4rem;
+    }
+
+    .email-box p:first-child{
+      font-size:.82rem;
+      color:#94a3b8;
+      margin-bottom:6px;
+    }
+
+    .email-box p:last-child{
+      margin:0;
+      font-size:.95rem;
+      color:#166534;
+      font-weight:700;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+
+      flex-wrap:wrap;
+      word-break:break-word;
+    }
+
+    /* ─────────────────────────
+       RESEND
+    ───────────────────────── */
+
+    .resend-link{
+      text-align:center;
+      font-size:.9rem;
+      font-weight:700;
+      color:#0d6efd;
+      cursor:pointer;
+      margin-bottom:1rem;
+      transition:.25s ease;
+      word-break:break-word;
+    }
+
+    .resend-link:hover{
+      opacity:.8;
+    }
+
+    /* ─────────────────────────
+       VERIFY TEXT
+    ───────────────────────── */
+
+    .verify-text{
+      text-align:center;
+      font-size:.9rem;
+      color:#64748b;
+      font-weight:600;
+      margin-bottom:1rem;
+      line-height:1.5;
+    }
+
+    /* ─────────────────────────
+       CODE INPUTS
+    ───────────────────────── */
+
+    .code-input{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:10px;
+      margin:1.3rem 0 1.8rem;
+      width:100%;
+    }
+
+    .code-cell{
+      width:100%;
+      aspect-ratio:1/1.15;
+      min-height:54px;
+
+      border-radius:18px;
+      border:2px solid #e2e8f0;
+      background:#f8fafc;
+
+      text-align:center;
+      font-size:clamp(1.2rem,4vw,2rem);
+      font-weight:800;
+      color:#0f172a;
+
+      transition:.25s ease;
+      font-family:'Outfit',sans-serif;
+    }
+
+    .code-cell:focus{
+      outline:none;
+      border-color:#0d6efd;
+      background:white;
+      box-shadow:0 0 0 5px rgba(13,110,253,.12);
+      transform:translateY(-2px);
+    }
+
+    /* ─────────────────────────
+       BUTTON
+    ───────────────────────── */
+
+    .btn-send-code{
+      width:100%;
+      border:none;
+      border-radius:100px;
+      padding:15px 20px;
+
+      background:linear-gradient(135deg,#0d6efd,#004fc7);
+
+      color:white;
+      font-size:1rem;
+      font-weight:700;
+
+      cursor:pointer;
+      transition:.3s ease;
+
+      box-shadow:0 12px 30px rgba(13,110,253,.25);
+    }
+
+    .btn-send-code:hover{
+      transform:translateY(-2px);
+      box-shadow:0 18px 40px rgba(13,110,253,.35);
+    }
+
+    .btn-send-code:disabled{
+      opacity:.7;
+      cursor:not-allowed;
+    }
+
+    /* ─────────────────────────
+       INFO TEXT
+    ───────────────────────── */
+
+    .info-text{
+      margin-top:1rem;
+      text-align:center;
+      font-size:.82rem;
+      color:#94a3b8;
+      line-height:1.6;
+    }
+
+    /* ─────────────────────────
+       BACK LINK
+    ───────────────────────── */
+
+    .back-link{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+
+      margin-top:1.4rem;
+
+      text-decoration:none;
+      color:#64748b;
+
+      font-size:.92rem;
+      font-weight:600;
+
+      transition:.25s ease;
+      text-align:center;
+    }
+
+    .back-link:hover{
+      color:#0d6efd;
+    }
+
+    /* ─────────────────────────
+       LARGE TABLETS
+    ───────────────────────── */
+
+    @media (max-width:768px){
+
+      .login-wrapper{
+        align-items:flex-start;
+        padding:1.25rem;
+      }
+
+      .login-card{
+        margin:auto;
+      }
+
+      .step-bar{
+        gap:.5rem;
+      }
+
+      .step-box{
+        padding:10px 6px;
+      }
+
+    }
+
+    /* ─────────────────────────
+       MOBILE
+    ───────────────────────── */
+
+    @media(max-width:576px){
+
+      body{
+        overflow:auto;
+      }
+
+      .login-wrapper{
+        padding:1rem;
+      }
+
+      .login-card{
+        border-radius:24px;
+      }
+
+      .code-input{
+        gap:8px;
+      }
+
+      .code-cell{
+        border-radius:14px;
+      }
+
+      .email-box{
+        padding:15px;
+      }
+
+      .btn-send-code{
+        padding:14px;
+        font-size:.95rem;
+      }
+
+    }
+
+    /* ─────────────────────────
+       SMALL MOBILE
+    ───────────────────────── */
+
+    @media(max-width:420px){
+
+      .login-wrapper{
+        padding:.75rem;
+      }
+
+      .login-card{
+        padding:1.2rem;
+        border-radius:20px;
+      }
+
+      .step-bar{
+        flex-direction:column;
+      }
+
+      .step-box{
+        width:100%;
+      }
+
+      .code-input{
+        gap:6px;
+      }
+
+      .code-cell{
+        min-height:48px;
+        font-size:1.1rem;
+      }
+
+      .logo-icon{
+        border-radius:20px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+  <!-- BACKGROUND -->
+  <div class="bg-circle circle-1"></div>
+  <div class="bg-circle circle-2"></div>
+
+  <!-- CARD -->
+  <div class="login-card">
+
+    <!-- LOGO -->
+    <div class="login-logo">
+
+      <div class="logo-icon">
+        <i class="bi bi-shield-lock-fill"></i>
+      </div>
+
+      <h1>KingSTrips Admin</h1>
+      <p>Two-factor authentication</p>
+
+    </div>
+
+    <!-- STEP BAR -->
+    <div class="step-bar">
+
+      <div class="step-box done">
+        1. Password
+      </div>
+
+      <div class="step-box active">
+        2. 2FA Code
+      </div>
+
+    </div>
+
+    <!-- ERROR -->
+    {% if error %}
+    <div class="alert-danger">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- EMAIL -->
+    <div class="email-box">
+
+      <p>A 6-digit code was sent to</p>
+
+      <p>
+        <i class="bi bi-envelope-fill"></i>
+        {{ masked_email }}
+      </p>
+
+    </div>
+
+    <!-- RESEND -->
+    <p class="resend-link" id="resendTimer" onclick="resendCode()">
+      Resend code
+    </p>
+
+    <!-- VERIFY TEXT -->
+    <p class="verify-text">
+      Enter the 6-digit verification code
+    </p>
+
+    <!-- CODE INPUTS -->
+    <div class="code-input">
+
+      <input type="text" name="d1" class="code-cell" maxlength="1" autocomplete="one-time-code" autofocus>
+
+      <input type="text" name="d2" class="code-cell" maxlength="1">
+
+      <input type="text" name="d3" class="code-cell" maxlength="1">
+
+      <input type="text" name="d4" class="code-cell" maxlength="1">
+
+      <input type="text" name="d5" class="code-cell" maxlength="1">
+
+      <input type="text" name="d6" class="code-cell" maxlength="1">
+
+    </div>
+
+    <!-- FORM -->
+    <form id="verify-form">
+
+      <input type="hidden" name="username" value="{{ username }}">
+
+      <button type="submit" class="btn-send-code" id="verifyBtn">
+        Verify &amp; Sign In
+      </button>
+
+    </form>
+
+    <!-- INFO -->
+    <p class="info-text">
+      Didn't receive it? Check your spam folder,
+      or resend the verification code.
+    </p>
+
+    <!-- BACK -->
+    <a href="{{ url_for('admin_login') }}" class="back-link">
+      <i class="bi bi-arrow-left"></i>
+      Back to login
+    </a>
+
+  </div>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+
+(function(){
+
+  var username = '{{ username }}';
+
+  var cells = document.querySelectorAll('.code-cell');
+
+  /* ─────────────────────────
+     INPUT AUTO MOVE
+  ───────────────────────── */
+
+  cells.forEach(function(cell, i){
+
+    cell.addEventListener('input', function(){
+
+      this.value = this.value.replace(/\D/g,'');
+
+      if(this.value.length === 1 && i < cells.length - 1){
+        cells[i + 1].focus();
+      }
+
+    });
+
+    cell.addEventListener('keydown', function(e){
+
+      if(e.key === 'Backspace' && !this.value && i > 0){
+        cells[i - 1].focus();
+      }
+
+    });
+
+    cell.addEventListener('paste', function(e){
+
+      e.preventDefault();
+
+      var digits = (
+        (e.clipboardData || window.clipboardData)
+        .getData('text')
+        .replace(/\D/g,'')
+      ).slice(0,6);
+
+      digits.split('').forEach(function(d,j){
+
+        var target = cells[j + i] || cells[j];
+
+        if(target){
+          target.value = d;
+        }
+
+      });
+
+      var last = i + digits.length - 1 || 0;
+
+      cells[Math.min(last, cells.length - 1)].focus();
+
+    });
+
+  });
+
+  /* ─────────────────────────
+     RESEND CODE
+  ───────────────────────── */
+
+  var resendLocked = false;
+  var timerEl = document.getElementById('resendTimer');
+
+  window.resendCode = function(){
+
+    if(resendLocked) return;
+
+    resendLocked = true;
+
+    timerEl.innerHTML = `
+      <span class="spinner-border spinner-border-sm me-2"></span>
+      Sending code...
+    `;
+
+    fetch('{{ url_for("admin_2fa_send") }}', {
+
+      method:'POST',
+
+      headers:{
+        'Content-Type':'application/json'
+      },
+
+      body:JSON.stringify({
+        username:username
+      })
+
+    })
+
+    .then(function(r){
+      return r.json();
+    })
+
+    .then(function(){
+
+      resendLocked = false;
+
+      timerEl.innerHTML = `
+        <i class="bi bi-check-circle-fill"></i>
+        Code sent successfully
+      `;
+
+      setTimeout(function(){
+        timerEl.textContent = 'Resend code';
+      },4000);
+
+    })
+
+    .catch(function(){
+
+      resendLocked = false;
+
+      timerEl.innerHTML = `
+        <i class="bi bi-x-circle-fill"></i>
+        Failed to send code
+      `;
+
+      setTimeout(function(){
+        timerEl.textContent = 'Resend code';
+      },4000);
+
+    });
+
+  };
+
+  /* ─────────────────────────
+     VERIFY CODE
+  ───────────────────────── */
+
+  var form = document.getElementById('verify-form');
+  var verifyBtn = document.getElementById('verifyBtn');
+
+  if(form){
+
+    form.addEventListener('submit', function(e){
+
+      e.preventDefault();
+
+      var code = '';
+
+      for(var i = 0; i < 6; i++){
+        code += (cells[i] && cells[i].value) || '';
+      }
+
+      if(code.length !== 6){
+        return;
+      }
+
+      verifyBtn.disabled = true;
+
+      verifyBtn.innerHTML = `
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Verifying...
+      `;
+
+      fetch('{{ url_for("admin_2fa_verify") }}', {
+
+        method:'POST',
+
+        headers:{
+          'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+          username:username,
+          code:code
+        })
+
+      })
+
+      .then(function(r){
+        return r.json();
+      })
+
+      .then(function(d){
+
+        if(d.status === 'authenticated' && d.redirect){
+
+          window.location.href = d.redirect;
+          return;
+
+        }
+
+        verifyBtn.disabled = false;
+        verifyBtn.innerHTML = 'Verify &amp; Sign In';
+
+        var existing = document.getElementById('verify-error');
+
+        if(!existing){
+
+          var div = document.createElement('div');
+
+          div.id = 'verify-error';
+          div.className = 'alert-danger';
+
+          form.parentNode.insertBefore(div, form);
+
+        }
+
+        document.getElementById('verify-error').textContent =
+          d.error || 'Incorrect verification code.';
+
+        for(var j = 0; j < 6; j++){
+          cells[j].value = '';
+        }
+
+        cells[0].focus();
+
+      })
+
+      .catch(function(){
+
+        verifyBtn.disabled = false;
+        verifyBtn.innerHTML = 'Verify &amp; Sign In';
+
+      });
+
+    });
+
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
