@@ -1,0 +1,16 @@
+[
+  {
+    "id": "2026-05-19T22:46:53.587",
+    "name": "UnitTest",
+    "email": "codnellsmall@gmail.com",
+    "phone": "0670000000",
+    "subject": "Unit Test Trip",
+    "destination": "Pretoria",
+    "travel_date": "2026-06-01",
+    "travellers": "5",
+    "budget": "R15,000 - R30,000",
+    "message": "Automated test submission.",
+    "status": "new",
+    "ts": "2026-05-19T22:46:53.587"
+  }
+]
