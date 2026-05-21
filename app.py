@@ -587,34 +587,50 @@ def contact():
 
 @app.route("/contact", methods=["POST"])
 def contact_submit():
-    data    = request.get_json(force=True, silent=True) or request.form
-    name    = data.get("user_name")  or data.get("name",   "")
-    email   = data.get("user_email") or data.get("email",  "")
-    phone   = data.get("phone",      "")
-    subject = data.get("subject",    "")
+
+    data = request.get_json(force=True, silent=True) or request.form
+
+    name    = data.get("user_name") or data.get("name", "")
+    email   = data.get("user_email") or data.get("email", "")
+    phone   = data.get("phone", "")
+    subject = data.get("subject", "")
     dest    = data.get("destination", "")
     tdate   = data.get("travel_date", "")
-    pax     = data.get("travellers",  "")
-    budget  = data.get("budget",     "")
-    notes   = data.get("message",    "")
+    pax     = data.get("travellers", "")
+    budget  = data.get("budget", "")
+    notes   = data.get("message", "")
+
+    # ── Validation ───────────────────────────────────────
 
     if not name or not email or not subject:
         return jsonify({
-            "status":  "error",
+            "status": "error",
             "message": "Name, email, and subject are required.",
         }), 400
+
+    # ── Customer Email Template ─────────────────────────
 
     customer_html = f"""
     <!DOCTYPE html>
     <html>
     <body style="font-family:Arial,sans-serif;background:#f4f4f4;padding:40px;">
+
       <div style="max-width:600px;margin:auto;background:white;padding:40px;border-radius:16px;">
+
         <h1 style="color:#0d6efd;">KingSTrips</h1>
+
         <h2>Travel Enquiry Received</h2>
+
         <p>Hello {name},</p>
-        <p>Thank you for contacting KingSTrips.
-           We received your travel enquiry and will get back to you shortly.</p>
+
+        <p>
+          Thank you for contacting KingSTrips.
+          We received your travel enquiry and
+          will get back to you shortly.
+        </p>
+
         <hr>
+
         <p><strong>Full Name:</strong> {name}</p>
         <p><strong>Email:</strong> {email}</p>
         <p><strong>Phone:</strong> {phone}</p>
@@ -623,22 +639,38 @@ def contact_submit():
         <p><strong>Travel Date:</strong> {tdate}</p>
         <p><strong>Number of Travellers:</strong> {pax}</p>
         <p><strong>Budget Range:</strong> {budget}</p>
+
         <hr>
+
         <p><strong>Additional Message:</strong></p>
+
         <p>{notes}</p>
+
         <hr>
-        <p style="font-size:14px;color:#777;">2026 KingSTrips</p>
+
+        <p style="font-size:14px;color:#777;">
+          2026 KingSTrips
+        </p>
+
       </div>
+
     </body>
     </html>
     """
+
+    # ── Admin Email Template ────────────────────────────
 
     admin_html = f"""
     <!DOCTYPE html>
     <html>
     <body style="font-family:Arial,sans-serif;background:#f4f4f4;padding:40px;">
+
       <div style="max-width:600px;margin:auto;background:white;padding:40px;border-radius:16px;">
-        <h1 style="color:#0d6efd;">New Travel Enquiry</h1>
+
+        <h1 style="color:#0d6efd;">
+          New Travel Enquiry
+        </h1>
+
         <p><strong>Full Name:</strong> {name}</p>
         <p><strong>Email:</strong> {email}</p>
         <p><strong>Phone:</strong> {phone}</p>
@@ -647,81 +679,116 @@ def contact_submit():
         <p><strong>Travel Date:</strong> {tdate}</p>
         <p><strong>Number of Travellers:</strong> {pax}</p>
         <p><strong>Budget Range:</strong> {budget}</p>
+
         <hr>
+
         <p><strong>Additional Message:</strong></p>
+
         <p>{notes}</p>
+
         <hr>
-        <p style="font-size:14px;color:#777;">Sent from KingSTrips Website</p>
+
+        <p style="font-size:14px;color:#777;">
+          Sent from KingSTrips Website
+        </p>
+
       </div>
+
     </body>
     </html>
     """
 
+    # ── Send Emails ─────────────────────────────────────
+
     try:
+
         headers = {
             "Authorization": f"Bearer {RESEND_API_KEY}",
-            "Content-Type":  "application/json",
+            "Content-Type": "application/json",
         }
+
+        # ── SEND CONFIRMATION TO CUSTOMER ───────────────
 
         customer_response = requests.post(
             "https://api.resend.com/emails",
             headers=headers,
             json={
-                "from":    FROM_EMAIL,
-                "to":      [ADMIN_EMAIL],
-                "reply_to": email,
-                "subject": f"Customer Copy - {subject}",
-                "html":    customer_html,
+                "from": FROM_EMAIL,
+                "to": [email],  # FIXED
+                "reply_to": ADMIN_EMAIL,
+                "subject": f"KingSTrips Enquiry Confirmation - {subject}",
+                "html": customer_html,
             },
             timeout=10,
         )
+
+        # ── SEND ENQUIRY TO ADMIN ───────────────────────
 
         admin_response = requests.post(
             "https://api.resend.com/emails",
             headers=headers,
             json={
-                "from":    FROM_EMAIL,
-                "to":      [ADMIN_EMAIL],
+                "from": FROM_EMAIL,
+                "to": [ADMIN_EMAIL],
                 "reply_to": email,
                 "subject": f"New Contact Form Submission - {subject}",
-                "html":    admin_html,
+                "html": admin_html,
             },
             timeout=10,
         )
 
-        print("Customer Email:", customer_response.status_code, customer_response.text)
-        print("Admin Email:",    admin_response.status_code,    admin_response.text)
+        print(
+            "Customer Email:",
+            customer_response.status_code,
+            customer_response.text
+        )
 
-        if (customer_response.status_code in [200, 201]
-                and admin_response.status_code in [200, 201]):
+        print(
+            "Admin Email:",
+            admin_response.status_code,
+            admin_response.text
+        )
+
+        # ── Save Submission ─────────────────────────────
+
+        if (
+            customer_response.status_code in [200, 201]
+            and admin_response.status_code in [200, 201]
+        ):
+
             save_submission({
-                "id":          datetime.utcnow().isoformat(timespec="milliseconds"),
-                "name":        name,
-                "email":       email,
-                "phone":       phone,
-                "subject":     subject,
+                "id": datetime.utcnow().isoformat(timespec="milliseconds"),
+                "name": name,
+                "email": email,
+                "phone": phone,
+                "subject": subject,
                 "destination": dest,
                 "travel_date": tdate,
-                "travellers":  pax,
-                "budget":      budget,
-                "message":     notes,
-                "status":      "new",
-                "ts":          datetime.utcnow().isoformat(timespec="milliseconds"),
+                "travellers": pax,
+                "budget": budget,
+                "message": notes,
+                "status": "new",
+                "ts": datetime.utcnow().isoformat(timespec="milliseconds"),
             })
+
             return jsonify({
-                "status":  "success",
+                "status": "success",
                 "message": "Message sent successfully.",
             }), 200
 
         return jsonify({
-            "status":  "error",
+            "status": "error",
             "message": "Email delivery partially failed.",
         }), 500
 
     except Exception as e:
-        print("EMAIL ERROR:", e)
-        return jsonify({"status": "error", "message": str(e)}), 500
 
+        print("EMAIL ERROR:", e)
+
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 @app.route("/api/images")
 def get_images():
